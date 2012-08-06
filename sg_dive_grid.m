@@ -43,6 +43,7 @@ data_header = {'lon','lat','xpos','ypos','z','yrdate','divetime','press','sigmat
 
 for ii = dive_rng+1
     
+    try
     % start_ser_date is a serial date in the form of days since 1-jan-0000
     % which represents the start time of the dive
     ser_date = datenum(loginfo.year,loginfo.month,loginfo.date,loginfo.hour,loginfo.minute,loginfo.second+vmtime); 
@@ -147,6 +148,16 @@ for ii = dive_rng+1
     up = [];
     DWN = cat(1,DWN,dwn);
     dwn = [];
+    catch
+       warning('error on dive %d. Dive not processed',divenum);
+       divenum = ii;
+       try
+           divesum2;
+       catch
+           continue
+       end
+       continue
+    end
 end
 
 cd(oldpath);
