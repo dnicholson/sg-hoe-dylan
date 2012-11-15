@@ -54,6 +54,8 @@ for ii = dive_rng+1
         [~,botind] = min(zpos);
         idwn = 1:botind;
         iup = botind:length(vmtime);
+        
+        % remove bad (NaN) values...
         iup(find(isnan(sigmath0))-botind + 1) = [];
         
         

@@ -29,13 +29,13 @@
 % -------------------------------------------------------------------------
 
 
-function [UP DWN out_header] = sg_dive_grid(dive_rng, z_grid,path,varargin)
+function [UP DWN out_header] = sg_dive_sigma(dive_rng, sig_grid,path,varargin)
 
 oldpath = cd;
 cd(path);
 addpath(oldpath);
 
-z_grid = squeeze(z_grid);
+sig_grid = squeeze(sig_grid);
 
 if length(dive_rng) == 2
     dive_rng = dive_rng(1):dive_rng(2);
@@ -79,7 +79,7 @@ for ii = dive_rng+1
     ser_date = datenum(loginfo.year,loginfo.month,loginfo.date,loginfo.hour,loginfo.minute,loginfo.second+vmtime); 
     dv = datevec(ser_date);
     % decimal time (e.g. 2010.1234)
-    dectime = dec_year(ser_date);
+    
     
     [~,botind] = min(zpos);
     idwn = 1:botind;
@@ -94,15 +94,17 @@ for ii = dive_rng+1
     startlat = loginfo.GPS2_lat;
     divefract = vmtime./vmtime(end);
     
-    zd = vmdepth;
-    epsz = rand(length(zd),1).*1e-7;
+    sd = sigmath0;
+    %vt = vmtime;
+    vz = vmdepth;
+    epsz = rand(length(sd),1).*1e-7;
     
     % intitialize dive data arrays
-    dwn = zeros(length(z_grid),npos+ndata);
+    dwn = zeros(length(sig_grid),npos+ndata);
     up = dwn;
-    dwn(:,5) = z_grid;
+    %dwn(:,5) = sig_grid;
     dwn(:,7) = divenum;
-    up(:,5) = z_grid;
+    %up(:,5) = sig_grid;
     up(:,7) = divenum;
     
     %linearly interpolate data columns to z_grid (must have at least 10
@@ -110,14 +112,14 @@ for ii = dive_rng+1
     for jj = 1:ndata
         datacol = eval(data_header{jj});
         if length(find(~isnan(datacol(idwn)))) > 10
-            dwn(:,jj+npos) = naninterp1(zd(idwn)+epsz(idwn), datacol(idwn), z_grid);
+            dwn(:,jj+npos) = naninterp1(sd(idwn)+epsz(idwn), datacol(idwn), sig_grid);
         else
-            dwn(:,jj+npos) = NaN.*z_grid;
+            dwn(:,jj+npos) = NaN.*sig_grid;
         end
         if length(find(~isnan(datacol(iup)))) > 10
-            up(:,jj+npos) = naninterp1(zd(iup)+epsz(iup), datacol(iup), z_grid);
+            up(:,jj+npos) = naninterp1(sd(iup)+epsz(iup), datacol(iup), sig_grid);
         else
-            up(:,jj+npos) = NaN.*z_grid;
+            up(:,jj+npos) = NaN.*sig_grid;
         end
     end
 
@@ -136,23 +138,26 @@ for ii = dive_rng+1
     lonpos = startlon + (endlon - startlon).*divefract;
     latpos = startlat + (endlat - startlat).*divefract;
     [xpos, ypos] = utm_hot(lonpos,latpos);
+    dectime = dec_year(ser_date);
     
     if length(find(~isnan(lonpos(idwn)))) > 10
-        dwn(:,1) = naninterp1(zd(idwn)+epsz(idwn),lonpos(idwn),z_grid);
-        dwn(:,2) = naninterp1(zd(idwn)+epsz(idwn),latpos(idwn),z_grid);
-        dwn(:,3) = naninterp1(zd(idwn)+epsz(idwn),xpos(idwn),z_grid);
-        dwn(:,4) = naninterp1(zd(idwn)+epsz(idwn),ypos(idwn),z_grid);
-        dwn(:,6) = naninterp1(zd(idwn)+epsz(idwn),dectime(idwn),z_grid);
+        dwn(:,1) = naninterp1(sd(idwn)+epsz(idwn),lonpos(idwn),sig_grid);
+        dwn(:,2) = naninterp1(sd(idwn)+epsz(idwn),latpos(idwn),sig_grid);
+        dwn(:,3) = naninterp1(sd(idwn)+epsz(idwn),xpos(idwn),sig_grid);
+        dwn(:,4) = naninterp1(sd(idwn)+epsz(idwn),ypos(idwn),sig_grid);
+        dwn(:,5) = naninterp1(sd(idwn)+epsz(idwn),vz(idwn),sig_grid);
+        dwn(:,6) = naninterp1(sd(idwn)+epsz(idwn),dectime(idwn),sig_grid);
     else
         dwn(:,1:4) = NaN;
     end
     
     if length(find(~isnan(lonpos(iup)))) > 10
-        up(:,1) = naninterp1(zd(iup)+epsz(iup),lonpos(iup),z_grid);
-        up(:,2) = naninterp1(zd(iup)+epsz(iup),latpos(iup),z_grid);
-        up(:,3) = naninterp1(zd(iup)+epsz(iup),xpos(iup),z_grid);
-        up(:,4) = naninterp1(zd(iup)+epsz(iup),ypos(iup),z_grid);
-        up(:,6) = naninterp1(zd(iup)+epsz(iup),dectime(iup),z_grid);
+        up(:,1) = naninterp1(sd(iup)+epsz(iup),lonpos(iup),sig_grid);
+        up(:,2) = naninterp1(sd(iup)+epsz(iup),latpos(iup),sig_grid);
+        up(:,3) = naninterp1(sd(iup)+epsz(iup),xpos(iup),sig_grid);
+        up(:,4) = naninterp1(sd(iup)+epsz(iup),ypos(iup),sig_grid);
+        up(:,5) = naninterp1(sd(iup)+epsz(iup),vz(iup),sig_grid);
+        up(:,6) = naninterp1(sd(iup)+epsz(iup),dectime(iup),sig_grid);
     else
         up(:,1:6) = NaN;
     end
@@ -164,7 +169,7 @@ for ii = dive_rng+1
 
     catch err
        warning('error on dive %d. Dive not processed',divenum);
-       % rethrow(err);
+       %rethrow(err);
        divenum = ii;
        try
            divesum;
