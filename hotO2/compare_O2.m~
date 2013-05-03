@@ -113,10 +113,6 @@ for ii = 1:length(cruises)
     end
 end
 end
-%
-% interpolates a seaglider profile to winkler measurements either in depth
-% or density coordinates.  A hybrid option used depth coords up to mixed
-% layer base and then density coords.
 
 function [O2_out, iml] = match_prof(c_z,c_dens,c_O2,sg_z,sg_dens,sg_O2,method)
 

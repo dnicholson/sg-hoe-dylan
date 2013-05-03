@@ -1,13 +1,11 @@
 function [] = read_hoedylan(crn)
 
 %
-load stationMap;
 hoedylan = importdata(['hoedylan' num2str(crn) '.gof'],' ',4);
 %load hoedylan_header.mat;
 hoe_data = hoedylan.data;
-hoe_data(hoe_data(:) == -9) = NaN;
 
-[cast2time, headtype] = loadcruise(crn);
+[cast2time headtype] = loadcruise(crn);
 load([headtype,'header.mat']);
 
 istn = strcmpi('STNNBR',header(1,:));
@@ -22,11 +20,10 @@ iO2 = strcmpi('OXYGEN',header(1,:));
 
 
 hoe.crn = crn;
-hoe.station = hoe_data(:,istn);
 hoe.cast = str2double(cellstr([num2str(hoe_data(:,istn),'%02d') num2str(hoe_data(:,icast),'%03d')]));
 hoe.bot = str2double(cellstr([num2str(hoe_data(:,istn),'%02d') num2str(hoe_data(:,icast),'%03d') num2str(hoe_data(:,ibot),'%02d')]));
-%hoe.lat = station2lat(hoe.station);
-%hoe.lon = station2lon(hoe.station);
+hoe.lat = hoe_data(:,ilat);
+hoe.lon = hoe_data(:,ilon);
 hoe.z = sw_dpth(hoe_data(:,ipress),22.75);
 hoe.S  = hoe_data(:,iS);
 hoe.T  = hoe_data(:,iT);
@@ -37,8 +34,6 @@ hoe.O2eq = O2sol(hoe.S,hoe.T);
 % why doesn't vector work here?
 for ii = 1:length(hoe.cast);
     hoe.t(ii,1) = cast2time(hoe.cast(ii));
-    hoe.lat(ii,1) = station2lat(hoe.station(ii));
-    hoe.lon(ii,1) = station2lon(hoe.station(ii));
 end
 
 save(['hoedylan' num2str(crn)],'hoe');
@@ -62,7 +57,7 @@ switch crn
         sum_time = dec_year(datenum(dstring,'mmddyyHHMM'));
         sum_cast = 1000.*str2double(dataArray{:,stacol})+str2double(dataArray{:,castcol});
         
-    case {1,5,7,9,11}
+    case {1,5,7,9}
         crtype = 'hoe';
         stacol = 1;
         castcol = 2;
@@ -75,6 +70,7 @@ switch crn
         dstring = strcat(num2str(dataArray{:,dycol}),dataArray{:,mocol},num2str(dataArray{:,yrcol}),dataArray{:,tcol});
         sum_time = dec_year(datenum(dstring,'ddmmmyyyyHH:MM:SS'));
         sum_cast = 1000.*dataArray{:,stacol}+dataArray{:,castcol};
+        sum_z = dataArray{:,zcol};
     otherwise
         error('unknown cruise number');
 end

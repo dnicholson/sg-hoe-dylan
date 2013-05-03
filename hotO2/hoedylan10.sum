@@ -1,0 +1,22 @@
+                                       Hawaii Ocean Time-Series   Cruise HOT-246
+   Ship  Section Sta Cast Cast  Date     Time            Position               Depth   Pres. Number  Parameters Comments
+  Cruise  WHP ID  #    #  Type         UTC Code   Lat.       Lon.       Code   Max  Hgt  Max Bottles 
+-------------------------------------------------------------------------------------------------------------------------
+33KB246/1  PRS2    1   1   ROS 091312 2310  BE  21 20.60 N  158 16.41 W  GPS  1580  569 1020     24          1,2    Dual T, C sensors
+33KB246/1  PRS2    2   1   ROS 091412 1146  BE  22 47.11 N  157 57.79 W  GPS  4711 3700 1020     24            1    Dual T, C sensors
+33KB246/1  PRS2    2   2   ROS 091412 1540  BE  22 44.97 N  157 59.95 W  GPS  4740   15 4808     24  1,2,3,4,5,6    Dual T, C sensors
+33KB246/1  PRS2    2   3   ROS 091412 2207  BE  22 45.03 N  158 00.01 W  GPS  4745 3734 1020     24  1,2,3,4,5,6    Dual T, C sensors
+33KB246/1  PRS2    2   4   ROS 091512 0112  BE  22 45.04 N  157 59.79 W  GPS  4740 3729 1020     22            1    Dual T, C sensors
+33KB246/1  PRS2    2   5   ROS 091512 0257  BE  22 47.73 N  157 59.31 W  GPS  4718 3707 1020     23            1    Dual T, C sensors
+33KB246/1  PRS2    2   6   ROS 091512 0559  BE  22 48.60 N  157 58.41 W  GPS  4703 3692 1020     23          1,2    Dual T, C sensors
+33KB246/1  PRS2    2   7   ROS 091512 0902  BE  22 48.55 N  157 57.28 W  GPS  4697 3686 1020     10            1    Dual T, C sensors
+33KB246/1  PRS2    2   8   ROS 091512 1148  BE  22 48.59 N  157 57.38 W  GPS  4697 3686 1020     24            1    Dual T, C sensors
+33KB246/1  PRS2    2   9   ROS 091512 1457  BE  22 48.12 N  157 57.07 W  GPS  4699 3688 1020     18            1    Dual T, C sensors
+33KB246/1  PRS2    2  10   ROS 091512 1752  BE  22 45.01 N  157 59.97 W  GPS  4741 3730 1020     19            1    Dual T, C sensors
+33KB246/1  PRS2    2  11   ROS 091512 2114  BE  22 42.04 N  157 59.48 W  GPS  4743 3732 1020     24            1    Dual T, C sensors
+33KB246/1  PRS2    2  12   ROS 091512 2354  BE  22 43.99 N  158 00.01 W  GPS  4741 3730 1020     23            1    Dual T, C sensors
+33KB246/1  PRS2    2  13   ROS 091612 0252  BE  22 44.99 N  158 00.04 W  GPS  4741 3730 1020     21            1    Dual T, C sensors
+33KB246/1  PRS2    2  14   ROS 091612 0551  BE  22 44.99 N  158 00.01 W  GPS  4742 3731 1020     22            1    Dual T, C sensors
+33KB246/1  PRS2    2  15   ROS 091612 0851  BE  22 45.00 N  158 00.01 W  GPS  4742   15 4810     15          1,2    Dual T, C sensors
+33KB246/1  PRS2    6   1   ROS 091712 0543  BE  21 50.79 N  158 21.79 W  GPS  2434    4 2460     13            1    Dual T, C sensors
+33KB246/1  PRS2   50   1   ROS 091612 2307  BE  22 45.76 N  157 55.88 W  GPS  4709 4510  200     22                 Dual T, C sensors
