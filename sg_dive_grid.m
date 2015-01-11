@@ -29,7 +29,7 @@
 % -------------------------------------------------------------------------
 
 
-function [UP DWN out_header] = sg_dive_grid(dive_rng, z_grid,path,varargin)
+function [UP, DWN, out_header] = sg_dive_grid(dive_rng, z_grid,path,varargin)
 
 oldpath = cd;
 cd(path);
@@ -54,15 +54,14 @@ if nargin > 3
     data_header = varargin{1};
 else  
     data_header = {'vmtime','press','sigmath0','salin','tempc','oxygen',...
-        'optode_dphase_oxygenc','fluor','red_ref','red_scttr','blue_ref',...
-        'blue_scttr','wl600_ref','wl600_sig','chl_ref','chl_sig',...
-        'cdom_ref','cdom_sig'};
+        'optode_dphase_oxygenc','chl_bb2fl','bb700','bb470','bb600',...
+        'chl_bbfl2','cdom'};
 end
 
 ndata = length(data_header);
 
 % position/dimension columns (always included)
-pos_header = {'lon','lat','xpos','ypos','z','dectime','divenum'};
+pos_header = {'lon','lat','xpos','ypos','z','ser_date','divenum'};
 npos = length(pos_header);
 
 out_header = [pos_header data_header];
@@ -79,7 +78,7 @@ for ii = dive_rng+1
     ser_date = datenum(loginfo.year,loginfo.month,loginfo.date,loginfo.hour,loginfo.minute,loginfo.second+vmtime); 
     dv = datevec(ser_date);
     % decimal time (e.g. 2010.1234)
-    dectime = dec_year(ser_date);
+    %dectime = dec_year(ser_date);
     
     [~,botind] = min(zpos);
     idwn = 1:botind;
@@ -142,7 +141,7 @@ for ii = dive_rng+1
         dwn(:,2) = naninterp1(zd(idwn)+epsz(idwn),latpos(idwn),z_grid);
         dwn(:,3) = naninterp1(zd(idwn)+epsz(idwn),xpos(idwn),z_grid);
         dwn(:,4) = naninterp1(zd(idwn)+epsz(idwn),ypos(idwn),z_grid);
-        dwn(:,6) = naninterp1(zd(idwn)+epsz(idwn),dectime(idwn),z_grid);
+        dwn(:,6) = naninterp1(zd(idwn)+epsz(idwn),ser_date(idwn),z_grid);
     else
         dwn(:,1:4) = NaN;
     end
@@ -152,7 +151,7 @@ for ii = dive_rng+1
         up(:,2) = naninterp1(zd(iup)+epsz(iup),latpos(iup),z_grid);
         up(:,3) = naninterp1(zd(iup)+epsz(iup),xpos(iup),z_grid);
         up(:,4) = naninterp1(zd(iup)+epsz(iup),ypos(iup),z_grid);
-        up(:,6) = naninterp1(zd(iup)+epsz(iup),dectime(iup),z_grid);
+        up(:,6) = naninterp1(zd(iup)+epsz(iup),ser_date(iup),z_grid);
     else
         up(:,1:6) = NaN;
     end

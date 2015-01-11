@@ -1,4 +1,4 @@
-function [t z_hp z_lp] = filtiso(DWN,t_ind,z_ind,surf)
+function [t v_hp v_lp] = filtiso(DWN,t_ind,surf_ind,surf,var_ind)
 
 % z_ind = 5;
 % t_ind = 6;
@@ -6,13 +6,13 @@ function [t z_hp z_lp] = filtiso(DWN,t_ind,z_ind,surf)
 f_cutoff = 365./2;
 
 
-d = find(abs(DWN(:,10)-surf) < 0.01);
+d = find(abs(DWN(:,surf_ind)-surf) < 0.01);
 t = DWN(d,t_ind);
-z = DWN(d,z_ind)-mean(DWN(d,z_ind));
+v = DWN(d,var_ind)-mean(DWN(d,var_ind));
 dt = median(diff(t));
 % Nyquist frequency
 fN = 1/(2.*dt);
 Wn = f_cutoff./fN;
 [b,a] = butter(9,Wn,'high');
-z_hp = filtfilt(b,a,z);
-z_lp = z - z_hp;
+v_hp = filtfilt(b,a,v);
+v_lp = v - v_hp;

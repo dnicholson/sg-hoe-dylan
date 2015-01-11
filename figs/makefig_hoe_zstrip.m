@@ -14,7 +14,8 @@ awidth = (1-lmarg-rmarg-(nplots_x-1)*xgutter)./nplots_x;
 aheight = (1-tmarg-bmarg-(nplots_y-1)*ygutter)./nplots_y;
 
 yrange = [0 200];
-xrange = [2012.35 2012.85];
+%xrange = [2012.35 2012.85];
+xrange = [datenum(2012,5,1) datenum(2012,11,7)];
 Trange = [15 30];
 Srange = [34.4 35.6];
 mk_sz = 14;
@@ -29,8 +30,10 @@ oldpath = cd;
 cd(sgpath);
 
 % load data
+load O2corr.mat;
 
 load sg146.mat
+DWN(:,26) = 100.*((DWN(:,14)+O2corr_148(1))./O2sol(DWN(:,11),DWN(:,12))-1);
 D146 = DWN;
 U146 = UP;
 mld((mld(:,1) == 0),:) = NaN;
@@ -96,14 +99,23 @@ axes2 = axes('Parent',figure1,'Position',[lmarg bmarg + 2.*aheight + ...
 
 hold all;
 
-s = scatter(U146(:,t_ind),U146(:,z_ind),10,U146(:,Sind_146),'filled','Marker','s');
-s = scatter(D146(:,t_ind),D146(:,z_ind),10,D146(:,Sind_146),'filled','Marker','s');
+% s = scatter(U146(:,t_ind),U146(:,z_ind),10,U146(:,Sind_146),'filled','Marker','s');
+% s = scatter(D146(:,t_ind),D146(:,z_ind),10,D146(:,Sind_146),'filled','Marker','s');
+% 
+% s = scatter(U148(:,t_ind),U148(:,z_ind),10,U148(:,Sind_148),'filled','Marker','s');
+% s = scatter(D148(:,t_ind),D148(:,z_ind),10,D148(:,Sind_148),'filled','Marker','s');
+% 
+% s = scatter(U512(:,t_ind),U512(:,z_ind),10,U512(:,Sind_512),'filled','Marker','s');
+% s = scatter(D512(:,t_ind),D512(:,z_ind),10,D512(:,Sind_512),'filled','Marker','s');
 
-s = scatter(U148(:,t_ind),U148(:,z_ind),10,U148(:,Sind_148),'filled','Marker','s');
-s = scatter(D148(:,t_ind),D148(:,z_ind),10,D148(:,Sind_148),'filled','Marker','s');
+s = scatter(U146(:,t_ind),U146(:,z_ind),10,U146(:,Pind_146),'filled','Marker','s');
+s = scatter(D146(:,t_ind),D146(:,z_ind),10,D146(:,Pind_146),'filled','Marker','s');
 
-s = scatter(U512(:,t_ind),U512(:,z_ind),10,U512(:,Sind_512),'filled','Marker','s');
-s = scatter(D512(:,t_ind),D512(:,z_ind),10,D512(:,Sind_512),'filled','Marker','s');
+s = scatter(U148(:,t_ind),U148(:,z_ind),10,U148(:,Pind_148),'filled','Marker','s');
+s = scatter(D148(:,t_ind),D148(:,z_ind),10,D148(:,Pind_148),'filled','Marker','s');
+
+s = scatter(U512(:,t_ind),U512(:,z_ind),10,U512(:,Pind_512),'filled','Marker','s');
+s = scatter(D512(:,t_ind),D512(:,z_ind),10,D512(:,Pind_512),'filled','Marker','s');
 
 plot(mld146(:,1),mld146(:,2),'k','LineWidth',lnw);
 plot(mld148(:,1),mld148(:,2),'k','LineWidth',lnw);
